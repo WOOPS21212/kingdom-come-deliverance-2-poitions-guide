@@ -1,0 +1,1 @@
+Change the site background color to pink. Use Tailwind’s bg-pink-500 or regular CSS.

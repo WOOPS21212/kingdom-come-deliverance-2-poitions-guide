@@ -1,0 +1,59 @@
+# Kingdom Come Deliverance 2 Potions - Enhanced Features
+
+## Overview
+The Kingdom Come Deliverance 2 Potions application is a web-based reference guide that displays information about potions from the Kingdom Come Deliverance 2 game. The application currently shows a grid of potion cards with basic information and allows users to click on cards for detailed views. We need to enhance the application with additional features to improve user experience and functionality.
+
+## Core Features to Implement
+
+### 1. Page Title Update
+- Change the page title from "KCD2 Potions" to "Kingdom Come Deliverance 2"
+- The title should maintain its current styling but reflect the full game name
+
+### 2. Search Functionality
+- Add a search input field above the potion cards
+- Allow users to search potions by name or effects
+- The search should filter the displayed cards in real-time as the user types
+- Search should be case-insensitive and match partial strings
+- The search bar should have appropriate styling to match the rest of the interface
+
+### 3. Reverse Sort Order Button
+- Add a button next to the existing sort dropdown to toggle between ascending and descending order
+- The button should clearly indicate the current sort direction (e.g., up/down arrow)
+- The current sort type (alphabetical or ingredients count) should be maintained when toggling direction
+- The button should have appropriate styling to match the existing UI
+
+### 4. Card Animations
+- Implement animation effects when the potion cards first load on the page
+- Cards should fade in and/or slide in sequence rather than appearing all at once
+- The animation should be subtle and professional, not distracting
+- Consider staggered animations where cards appear in sequence rather than simultaneously
+
+### 5. Hover Effects on Potion Cards
+- Add visual feedback when users hover over potion cards
+- Effects should include subtle scaling (e.g., 1.05x), shadow enhancement, or border highlight
+- The transition should be smooth and responsive
+- The effect should provide clear visual feedback without being too dramatic
+
+## Technical Implementation Requirements
+
+### UI/UX Considerations
+- All new elements should match the existing dark theme styling
+- The interface should remain responsive on all screen sizes
+- Animations and effects should have appropriate performance optimization
+
+### Accessibility
+- Ensure all new interactive elements are keyboard accessible
+- Maintain color contrast ratios for text readability
+- Include appropriate ARIA attributes where needed
+
+## Implementation Priority
+1. Page Title Update (simplest change)
+2. Search Functionality (high user value)
+3. Reverse Sort Order Button (builds on existing functionality)
+4. Hover Effects on Potion Cards (enhances usability)
+5. Card Animations (visual polish)
+
+## Performance Considerations
+- Animations should be optimized to prevent layout thrashing
+- Search functionality should use debouncing to prevent excessive re-renders
+- All features should maintain the application's current loading performance 

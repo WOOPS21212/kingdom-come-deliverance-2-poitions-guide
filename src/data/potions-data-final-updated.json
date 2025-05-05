@@ -1,0 +1,276 @@
+[
+  {
+    "name": "Aesop",
+    "baseLiquid": "Oil",
+    "effects": "Increase horsemanship and houndmaster by 5 and makes it easier to sneak up on animals for 24 hours",
+    "enhancedEffects": "Animals take less notice of you and dogs don't bark at you.",
+    "difficulty": "Medium",
+    "ingredients": "Belladonna x1, Boar’s Tusk x1, Comfrey x2",
+    "steps": "Add 2 Comfrey to the mortar, grind, and pour into the cauldron > Add 1 Boar’s Tusk to the cauldron > Boil for 2 turns > Add 1 Belladonna to the mortar, grind, and pour into the cauldron > Prepare phial and distill",
+    "tags": ["buff", "animal handling", "stealth"]
+  },
+  {
+    "name": "Aqua Vitalis",
+    "baseLiquid": "Water",
+    "effects": "Lose 50% less Health and slows bleeding by 50% for 10 minutes",
+    "enhancedEffects": "At higher quality, further reduces health loss and bleeding rate",
+    "difficulty": "Easy",
+    "ingredients": "Dandelion x1, Marigold x1",
+    "steps": "Add 2 Dandelion to the cauldron > Boil for 1 turn > Add 1 Marigold to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Prepare phial and distill",
+    "acquisition": "Can be purchased from Aranka in the Nomads’ Camp, Herbalist Barnaby north of Trosky Castle, or the apothecary in Kuttenberg",
+    "tags": ["healing", "combat"]
+  },
+  {
+    "name": "Witch Potion",
+    "baseLiquid": "Oil",
+    "effects": "Induces hallucinations and anxiety.",
+    "difficulty": "Medium",
+    "ingredients": "Marigold x1, Belladonna x1, Herb Paris x1",
+    "steps": "Boil Herb Paris for one turn > Grind Marigold and add to cauldron > Boil for one more turn > Grind Belladonna and add to cauldron (do not boil) > Distill.",
+    "tags": ["poison", "hallucination"]
+  },
+  {
+    "name": "Artemisia",
+    "baseLiquid": "Spirits",
+    "effects": "Increase Strength by 4 and lower attack and block stamina cost -25% for 10 minutes",
+    "difficulty": "Easy",
+    "ingredients": "Wormwood x1, Sage x1",
+    "steps": "Add 1 Sage to the cauldron > Boil for 1 turn > Add 2 Wormwood to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Prepare phial and distill",
+    "tags": ["buff", "strength"]
+  },
+  {
+    "name": "Bane Poison",
+    "baseLiquid": "Wine",
+    "effects": "Makes running impossible and reduces Health by 110 in 30s",
+    "difficulty": "Hard",
+    "ingredients": "Amanita Muscaria x1, Belladonna x2, Wormwood x1",
+    "steps": "Add 1 Wormwood to the cauldron > Boil for 2 turns > Add 2 Belladonna to the mortar, grind, and pour into the cauldron > Boil for 1 turn using bellows > Add 1 Amanita Muscaria to the cauldron > Prepare phial and distill",
+    "tags": ["poison", "combat"]
+  }
+  ,
+  {
+    "name": "Bowman's Brew",
+    "baseLiquid": "Spirits",
+    "effects": "Increase marksmanship by 5 and slows stamina loss when aiming by 50% for 10 minutes",
+    "enhancedEffects": "Reduces stamina loss while aiming further and boosts accuracy slightly.",
+    "difficulty": "Medium",
+    "ingredients": "Eyebright x1, St. John's Wort x1",
+    "steps": "Add 2 Eyebright to the cauldron > Boil for 3 turns > Add 1 St. John's Wort to the mortar, grind, and pour into the cauldron > Boil for 1 turn using bellows > Prepare phial and distill",
+    "tags": ["buff", "ranged", "stamina"]
+  },
+  {
+    "name": "Buck’s Blood",
+    "baseLiquid": "Oil",
+    "effects": "Increase stamina by 30% and stamina regen by 15% for 40 minutes",
+    "difficulty": "Medium",
+    "ingredients": "St. John's Wort x1, Dandelion x1, Comfrey x1",
+    "steps": "Add 1 St. John's Wort to the mortar, grind, and pour into the cauldron > Add 1 Comfrey to the cauldron > Boil for 1 turn > Add 1 Dandelion to the cauldron > Boil for 1 turn using bellows > Pour into phial",
+    "tags": ["buff", "stamina"]
+  },
+  {
+    "name": "Chamomile Decoction",
+    "baseLiquid": "Wine",
+    "effects": "Sleep heals 4 times faster and restores energy 2 times faster for 24 hours",
+    "enhancedEffects": "Energy replenishes faster while sleeping and resistance to fatigue improves.",
+    "difficulty": "Medium",
+    "ingredients": "Chamomile x2, Sage x1",
+    "steps": "Add 2 Chamomile to the cauldron > Boil for 1 turn > Add 1 Sage to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["sleep", "healing", "energy"]
+  },
+  {
+    "name": "Cockerel",
+    "baseLiquid": "Spirits",
+    "effects": "Increase energy by 20 and decrease energy use by 20% for 12 hours",
+    "difficulty": "Medium",
+    "ingredients": "Mint x2, Valerian x1",
+    "steps": "Add 2 Mint to the mortar, grind, and pour into the cauldron > Boil for 1 turn > Add 1 Valerian to the cauldron > Boil for 2 turns > Prepare phial and distill",
+    "tags": ["buff", "energy", "recovery"]
+  },
+  {
+    "name": "Digestive Potion",
+    "baseLiquid": "Spirits",
+    "effects": "Increase Vitality by 2, cure food poisoning, and decrease nourishment by 20 for 10 minutes",
+    "enhancedEffects": "Cures any poisoning and boosts vitality.",
+    "difficulty": "Hard",
+    "ingredients": "Charcoal x1, Nettle x1, Thistle x2",
+    "steps": "Add 2 Thistle to the cauldron > Boil for 2 turns > Add 1 Nettle to the mortar, grind, and pour into the cauldron > Boil for 1 turn > Add 1 Charcoal to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["healing", "poison", "vitality"]
+  }
+
+  ,
+  {
+    "name": "Dollmaker Poison",
+    "baseLiquid": "Oil",
+    "effects": "Makes running impossible, reduces all weapon skills by 4, reduces Health by 30 slowly",
+    "difficulty": "Hard",
+    "ingredients": "Herb Paris x2, Valerian x1",
+    "steps": "Add 2 Herb Paris to the cauldron > Boil for 3 turns > Add 1 Valerian to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Prepare phial and distill",
+    "tags": ["poison", "combat"]
+  },
+  {
+    "name": "Embrocation",
+    "baseLiquid": "Oil",
+    "effects": "Increase Agility by 4 and sprinting costs 20% less stamina for 15 minutes",
+    "difficulty": "Hard",
+    "ingredients": "Boar’s Tusk x1, Eyebright x1, Poppy x1, Valerian x1",
+    "steps": "Add 1 Poppy and 1 Valerian to the cauldron > Boil for 2 turns > Add 1 Eyebright to the mortar, grind, and pour into the cauldron > Add 1 Boar’s Tusk to the cauldron > Boil for 1 turn > Pour into phial",
+    "tags": ["buff", "agility", "movement"]
+  },
+  {
+    "name": "Fever Tonic",
+    "baseLiquid": "Water",
+    "effects": "Cures fever",
+    "difficulty": "Medium",
+    "ingredients": "Elderberry Leaves x1, Feverfew x3, Ginger x2",
+    "steps": "Add 3 Feverfew to the cauldron > Boil for 2 turns > Add 1 Elderberry Leaves to the mortar, grind, and pour into the cauldron > Add 2 Ginger to the cauldron > Prepare phial and distill",
+    "tags": ["healing", "fever"]
+  },
+  {
+    "name": "Fox",
+    "baseLiquid": "Oil",
+    "effects": "Increase speech by 5 and increase reading speed for 24 hours",
+    "difficulty": "Medium",
+    "ingredients": "Belladonna x1, Charcoal x1, Nettle x1, St. John’s Wort x1",
+    "steps": "Add 1 St. John’s Wort and 1 Nettle to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Add 1 Charcoal to the mortar, grind, and pour into the cauldron > Add 1 Belladonna to the cauldron > Boil for 1 turn > Pour into phial",
+    "tags": ["buff", "speech", "reading"]
+  },
+  {
+    "name": "Hair o’ the Dog",
+    "baseLiquid": "Water",
+    "effects": "Remove drunkenness and hangover",
+    "difficulty": "Easy",
+    "ingredients": "Mint x1, Sage x1, St. John’s Wort x1",
+    "steps": "Add 1 Sage and 1 St. John’s Wort to the cauldron > Boil for 3 turns > Add 1 Mint to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["healing", "hangover"]
+  }
+  ,
+  {
+    "name": "Lead Shot Gunpowder",
+    "baseLiquid": "N/A",
+    "effects": "Used for crafting ammunition",
+    "difficulty": "Medium",
+    "ingredients": "Charcoal x1, Saltpetre x1, Sulphur x1",
+    "steps": "Add 1 Sulphur and 1 Saltpetre to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Add 1 Charcoal to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Pour into a mortar and grind",
+    "tags": ["crafting", "ammo"]
+  },
+  {
+    "name": "Lethean Water",
+    "baseLiquid": "Oil",
+    "effects": "Resets all perks",
+    "difficulty": "Hard",
+    "ingredients": "Belladonna x1, Henbane x1, Wormwood x2",
+    "steps": "Add 2 Wormwood to the mortar, grind, and pour into the cauldron > Add 1 Belladonna to the cauldron > Boil for 3 turns > Add 1 Henbane to the cauldron > Prepare phial and distill",
+    "notes": "Resets all perks; use with caution as this action is irreversible.",
+    "tags": ["reset", "utility"]
+  },
+  {
+    "name": "Lion Perfume",
+    "baseLiquid": "Oil",
+    "effects": "Increase charisma by 7 for 5 minutes",
+    "difficulty": "Medium",
+    "ingredients": "Mint x2, Sage x2",
+    "steps": "Add 2 Sage to the cauldron > Boil for 2 turns > Add 2 Mint to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["perfume", "charisma"]
+  },
+  {
+    "name": "Lullaby",
+    "baseLiquid": "Oil",
+    "effects": "Reduce stamina and stamina regen by 30%, reduce energy to 0, and reduce perception for 12 hours",
+    "difficulty": "Medium",
+    "ingredients": "Herb Paris x1, Poppy x1, Thistle x1",
+    "steps": "Add 1 Poppy to the cauldron > Boil for 1 turn > Add 1 Thistle to the cauldron > Boil for 1 turn > Add 1 Herb Paris to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["poison", "sleep"]
+  },
+  {
+    "name": "Marigold Decoction",
+    "baseLiquid": "Water",
+    "effects": "Heals 40% of Health over 60s and hangover is cured instantly",
+    "difficulty": "Easy",
+    "ingredients": "Marigold x2, Nettle x1",
+    "steps": "Add 1 Nettle to the cauldron > Boil for 2 turns > Add 2 Marigold to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["healing", "hangover"]
+  }
+
+  ,
+  {
+    "name": "Mintha Perfume",
+    "baseLiquid": "Oil",
+    "effects": "Increase charisma by 3 for 30 minutes",
+    "difficulty": "Medium",
+    "ingredients": "Dandelion x3, Marigold x1, Mint x1",
+    "steps": "Add 3 Dandelion and 1 Mint to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Add 1 Marigold to the cauldron > Boil for 1 turn using bellows > Prepare phial and distill",
+    "tags": ["perfume", "charisma"]
+  },
+  {
+    "name": "Moonshine",
+    "baseLiquid": "Spirits",
+    "effects": "Alcohol",
+    "difficulty": "Easy",
+    "ingredients": "Mint x2, Wormwood x2",
+    "steps": "Add 2 Wormwood to the cauldron > Boil for 2 turns > Add 2 Mint to the mortar, grind, and pour into the cauldron > Boil for 1 turn > Prepare phial and distill",
+    "tags": ["crafting", "alcohol"]
+  },
+  {
+    "name": "Nighthawk",
+    "baseLiquid": "Water",
+    "effects": "Energy decreases 50% slower at night and see better in the dark for 20 minutes",
+    "difficulty": "Medium",
+    "ingredients": "Belladonna x1, Chamomile x1, Eyebright x2",
+    "steps": "Add 2 Eyebright to the mortar, grind, and pour into the cauldron > Add 1 Belladonna to the cauldron > Boil for 3 turns > Add 1 Chamomile to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["vision", "night", "energy"]
+  },
+  {
+    "name": "Painkiller Brew",
+    "baseLiquid": "Water",
+    "effects": "Maximum stamina decrease from Health loss decreases by 50% and suppresses effects from injuries for 20 minutes",
+    "difficulty": "Medium",
+    "ingredients": "Comfrey x1, Marigold x1, Poppy x3",
+    "steps": "Add 3 Poppy to the mortar, grind, and pour into the cauldron > Add 1 Marigold to the cauldron and boil for 1 turn using bellows > Add 1 Comfrey to the cauldron and boil for 2 turns > Prepare phial and distill",
+    "tags": ["healing", "injury", "stamina"]
+  },
+  {
+    "name": "Quickfinger",
+    "baseLiquid": "Oil",
+    "effects": "Increase craftsmanship and thievery by 6 for 40 minutes",
+    "difficulty": "Hard",
+    "ingredients": "Cobweb x1, Eyebright x2, Valerian x2",
+    "steps": "Add 1 Cobweb and 2 Eyebright to the cauldron > Boil for 3 turns > Add 2 Valerian to the mortar, grind, and pour into the cauldron > Boil for 1 turn > Pour into phial",
+    "tags": ["buff", "thievery", "crafting"]
+  },
+  {
+    "name": "Saviour Schnapps",
+    "baseLiquid": "Wine",
+    "effects": "Increase strength, agility, vitality by 2 for 5 minutes",
+    "difficulty": "Medium",
+    "ingredients": "Belladonna x2, Nettle x1",
+    "steps": "Add 1 Nettle to the cauldron > Boil for 2 turns > Add 2 Belladonna to the mortar, grind, and pour into the cauldron > Boil for 1 turn > Pour into phial",
+    "qualityLevels": {
+      "weak": "Saves game with potential side effects.",
+      "normal": "Standard save functionality.",
+      "strong": "Saves game and grants temporary stat boost.",
+      "Henry quality": "Saves game, grants stat boost, and additional perk."
+    },
+    "tags": ["save", "buff"]
+  },
+  {
+    "name": "Scattershot Powder",
+    "baseLiquid": "N/A",
+    "effects": "Used for crafting ammunition",
+    "difficulty": "Medium",
+    "ingredients": "Leached Charcoal x1, Saltpetre x1, Sulphur x1",
+    "steps": "Add 1 Sulphur and 1 Saltpetre to the mortar, grind, and pour into the cauldron > Boil for 3 turns > Add 1 Leached Charcoal to the mortar, grind, and pour into the cauldron > Boil for 1 turn > Pour into a mortar and grind",
+    "tags": ["crafting", "ammo"]
+  },
+  {
+    "name": "Soap",
+    "baseLiquid": "Water",
+    "effects": "Use to wash clothes",
+    "difficulty": "Easy",
+    "ingredients": "Charcoal x1, Dandelion x1, Thistle x2",
+    "steps": "Add 2 Thistle to the mortar, grind, and pour into the cauldron > Boil for 2 turns > Add 1 Dandelion to the cauldron and boil for 1 turn > Add 1 Charcoal to the mortar, grind, and pour into the cauldron > Pour into phial",
+    "tags": ["utility", "cleaning"]
+  }
+
+
+
+]
