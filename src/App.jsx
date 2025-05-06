@@ -84,6 +84,31 @@ const getPotionIcon = (name) => {
   return null;
 };
 
+// Helper function to load Buy Me a Coffee script
+const loadBuyMeCoffeeScript = () => {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js';
+  script.async = true;
+  script.onload = () => {
+    // Create button after script loads
+    if (typeof window.BuyMeACoffee !== 'undefined') {
+      window.BuyMeACoffee.createButton({
+        name: "bmc-button",
+        slug: "404found.art",
+        color: "#40DCA5",
+        emoji: "",
+        font: "Cookie",
+        text: "Buy me a coffee",
+        outline_color: "#000000",
+        font_color: "#ffffff",
+        coffee_color: "#FFDD00"
+      });
+    }
+  };
+  document.body.appendChild(script);
+  return script;
+};
+
 export default function App() {
   const [selectedPotion, setSelectedPotion] = useState(null);
   const [sort, setSort] = useState("alphabetical");
@@ -93,6 +118,14 @@ export default function App() {
   const [cardsVisible, setCardsVisible] = useState(false);
   const [modalAnimation, setModalAnimation] = useState(""); // "entering", "entered", "exiting", "exited"
   
+  // Load Buy Me a Coffee script
+  useEffect(() => {
+    const script = loadBuyMeCoffeeScript();
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   // Function to determine column count based on screen width
   function getColumnCount() {
     if (typeof window === 'undefined') return "repeat(auto-fill, minmax(250px, 1fr))";
@@ -321,8 +354,60 @@ export default function App() {
       <style>{modalStyles}</style>
       
       <div style={{ maxWidth: "1800px", margin: "0 auto", width: "100%" }}>
-        <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>Kingdom Come Deliverance 2</h1>
+        <h1 style={{ fontSize: "2rem", marginBottom: "20px", textAlign: "center" }}>Kingdom Come Deliverance 2 Alchemy Guide</h1>
         
+        <div style={{
+          display: "flex",
+          flexDirection: window.innerWidth > 768 ? "row" : "column",
+          gap: "30px",
+          alignItems: "flex-start",
+          marginBottom: "30px"
+        }}>
+          {/* Left Column - Description */}
+          <div style={{ flex: "1" }}>
+            <p style={{ 
+              fontSize: "1rem", 
+              color: "#ccc", 
+              lineHeight: "1.6",
+              padding: "0 20px"
+            }}>
+              Discover the complete alchemy and potion brewing database for Kingdom Come Deliverance 2. Our comprehensive guide features every potion recipe, ingredient location, and brewing instruction you need. Perfect for both beginner alchemists learning the basics and expert brewers seeking advanced recipes. Find detailed step-by-step guides for crafting healing potions, combat buffs, and special elixirs to enhance your medieval RPG experience.
+            </p>
+          </div>
+
+          {/* Right Column - Support Section */}
+          <div style={{
+            flex: "1",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "20px",
+            padding: "0 20px"
+          }}>
+            {/* Buy Me a Coffee Button */}
+            <div id="buy-me-a-coffee-container" />
+            
+            {/* Separator Line */}
+            <div style={{
+              width: "100%",
+              height: "1px",
+              background: "#333",
+              margin: "10px 0"
+            }} />
+
+            {/* QR Code */}
+            <img 
+              src="/kingdom-come-deliverance-2-potions/images/bmc_qr.png"
+              alt="Buy Me a Coffee QR Code"
+              style={{
+                width: "200px",
+                height: "200px",
+                borderRadius: "10px"
+              }}
+            />
+          </div>
+        </div>
+
         <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginBottom: "20px" }}>
           <input
             type="text"
