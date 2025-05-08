@@ -656,7 +656,7 @@ export default function App() {
             Ingredients
           </a>
           <a 
-            onClick={() => scrollToSection('advanced')} 
+            href="/kingdom-come-deliverance-2-potions/advanced.html"
             style={{ 
               color: activeSection === 'advanced' ? "#FF9800" : "#fff", 
               textDecoration: "none", 
@@ -1365,7 +1365,7 @@ export default function App() {
             Ingredient Locations
           </a>
           <a 
-            onClick={() => scrollToSection('advanced')}
+            href="/kingdom-come-deliverance-2-potions/advanced.html"
             style={{
               padding: "10px 20px",
               background: "rgba(20, 20, 20, 0.7)",
@@ -1690,7 +1690,7 @@ export default function App() {
         </a>
         <a 
           className="mobile-menu-link" 
-          onClick={() => scrollToSection('advanced')}
+          href="/kingdom-come-deliverance-2-potions/advanced.html"
         >
           Advanced Techniques
         </a>

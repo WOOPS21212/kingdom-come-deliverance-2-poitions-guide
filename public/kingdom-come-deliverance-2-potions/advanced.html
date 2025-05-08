@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Advanced Brewing Techniques - Kingdom Come Deliverance 2</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root {
+      font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
+      font-weight: 400;
+      color-scheme: light dark;
+      color: rgba(255, 255, 255, 0.87);
+      background-color: #111;
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: rgba(17, 17, 17, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #333;
+      z-index: 100;
+      padding: 15px 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .nav-brand {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #FF9800;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      padding: 5px 0;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .nav-link:hover {
+      color: #FF9800;
+      border-color: #FF9800;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding-top: 30px;
+    }
+    .header h1 {
+      font-size: 2.2rem;
+      color: #FF9800;
+      margin-bottom: 20px;
+    }
+    .header p {
+      font-size: 1.2rem;
+      color: #ddd;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .content-section {
+      background: rgba(20, 20, 20, 0.7);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      margin-bottom: 40px;
+    }
+    .content-section h2 {
+      font-size: 1.6rem;
+      color: #FF9800;
+      margin-top: 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+    .content-section h3 {
+      color: #FF9800;
+      font-size: 1.2rem;
+      margin-top: 25px;
+      margin-bottom: 15px;
+    }
+    .content-section p {
+      font-size: 1.1rem;
+      color: #ddd;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .content-section ul, .content-section ol {
+      padding-left: 25px;
+      margin-bottom: 20px;
+    }
+    .content-section li {
+      color: #ddd;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .content-section strong {
+      color: #FF9800;
+    }
+    .highlight {
+      background: rgba(255, 152, 0, 0.2);
+      border-left: 3px solid #FF9800;
+      padding-left: 15px;
+      margin-bottom: 20px;
+    }
+    .footer {
+      border-top: 1px solid #333;
+      margin-top: 50px;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      background-color: #1a1a1a;
+      flex-wrap: wrap;
+    }
+    .footer a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer a:hover {
+      color: #FF9800;
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .content-section { padding: 25px; }
+      .header h1 { font-size: 1.5rem; }
+    }
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 1.5rem;
+      opacity: 0.7;
+      transition: opacity 0.3s, background 0.3s;
+    }
+    .back-to-top:hover {
+      opacity: 1;
+      background: #FF9800;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-brand">KCD2 Alchemy</div>
+    <div class="nav-links">
+      <a href="/kingdom-come-deliverance-2-potions/" class="nav-link">Home</a>
+      <a href="/kingdom-come-deliverance-2-potions/alchemy-basics.html" class="nav-link">Basics</a>
+      <a href="/kingdom-come-deliverance-2-potions/#ingredients" class="nav-link">Ingredients</a>
+      <a href="/kingdom-come-deliverance-2-potions/advanced.html" class="nav-link" style="color:#FF9800; border-bottom:2px solid #FF9800;">Advanced</a>
+    </div>
+  </nav>
+  <div class="container">
+    <header class="header">
+      <h1>Advanced Brewing Techniques</h1>
+      <p>Take your alchemy to the next level with expert tips, advanced strategies, and efficiency secrets for Kingdom Come Deliverance 2.</p>
+    </header>
+    <section class="content-section">
+      <h2>Advanced Brewing Techniques</h2>
+      <div class="highlight">
+        Mastering the basics is just the start—advanced alchemy lets you craft stronger, more efficient potions, and even experiment beyond known recipes. Here's how to take your brews to the next level:
+      </div>
+      <h3>1. Use Alchemy Perks Strategically</h3>
+      <ul>
+        <li><strong>Secret of Secrets</strong> – Enables brewing "Henry's Quality" potions (best possible effects).</li>
+        <li><strong>Secret of Matter</strong> – Doubles potion yield.</li>
+        <li><strong>Secret of Equilibrium</strong> – Lets you slightly mess up and still get good results.</li>
+        <li><strong>Routine</strong> – Speeds up the process once you've mastered a recipe.</li>
+        <li><strong>Experienced Brewer</strong> – Increases your margin for error during brewing.</li>
+      </ul>
+      <div class="highlight">
+        Tip: Focus on perks that match your playstyle—mass production, quality perfection, or speed.
+      </div>
+      <h3>2. Perfecting Timing and Turns</h3>
+      <ul>
+        <li>Potion steps often require exact turn counts of boiling or fanning the fire. One mistake (like turning the sandglass twice instead of once) can wreck a whole batch.</li>
+        <li>Count carefully: One sandglass turn = one in-game "turn."</li>
+        <li>Double-check step order: Ingredients added too early/late affect reactions.</li>
+        <li>Heat control matters: Use the bellows only when required—overheating is a common mistake.</li>
+      </ul>
+      <h3>3. Ingredient Order Matters</h3>
+      <ul>
+        <li>Even if a recipe lists all ingredients, the order of operations—when to grind, boil, or stir—dramatically changes the result.</li>
+        <li>Always grind before adding to the cauldron if required.</li>
+        <li>Never boil ingredients that aren't meant to be—some need to steep or distill cold.</li>
+        <li>Pay attention to distillation: some recipes require cooling before filtering.</li>
+      </ul>
+      <h3>4. Custom Recipes & Experimentation</h3>
+      <ul>
+        <li>Once you know what each herb or item does, you can mix and match to discover your own formulas. This is risky but can lead to unique effects.</li>
+        <li>Combine ingredients with synergistic effects (e.g. healing + stamina recovery).</li>
+        <li>Note how different base liquids (water, spirits, wine, oil) affect the outcome.</li>
+        <li>Record what works—there's no automatic recipe log for your experiments.</li>
+      </ul>
+      <div class="highlight">
+        Warning: Custom brews don't always succeed unless you have perks like Concocter or Witchmaster.
+      </div>
+      <h3>5. Brewing Efficiency Tips</h3>
+      <ul>
+        <li>Batch brewing: Use Secret of Matter to double output.</li>
+        <li>Stockpile ground herbs: Pre-grind herbs to speed up potion prep.</li>
+        <li>Keep potions sorted: Label them or sort by effect (healing, buffs, poisons).</li>
+      </ul>
+      <h3>6. Use of Rare Ingredients</h3>
+      <ul>
+        <li>Some potions benefit from rare or regional-only herbs and parts (e.g. Boar's Tusk, Mandrake, Herb Paris).</li>
+        <li>Provide stronger or unusual effects.</li>
+        <li>Are often used in quest-only or high-end alchemy.</li>
+        <li>May require you to visit specific apothecaries or regions.</li>
+      </ul>
+      <h3>7. Special Equipment Interactions</h3>
+      <ul>
+        <li>Some stations have upgraded tools (like precise bellows, better phials, or larger cauldrons) that reduce error margins.</li>
+        <li>Look for monastery benches or master-level labs.</li>
+        <li>These stations often let you skip beginner animations and go straight to ingredients.</li>
+      </ul>
+    </section>
+  </div>
+  <footer class="footer">
+    <a href="https://www.instagram.com/andrew_mcbride_atl/" target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-instagram"></i>
+    </a>
+    <a href="https://vimeo.com/andrewmcbride" target="_blank" rel="noopener noreferrer">
+      <i class="fab fa-vimeo-v"></i>
+    </a>
+    <a href="https://www.404found.art/" target="_blank" rel="noopener noreferrer">
+      404found.art
+    </a>
+    <a href="https://motionographer.com/" target="_blank" rel="noopener noreferrer">
+      Motionographer
+    </a>
+  </footer>
+  <a href="#" class="back-to-top">↑</a>
+</body>
+</html> 
