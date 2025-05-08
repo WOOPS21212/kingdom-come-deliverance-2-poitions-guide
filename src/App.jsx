@@ -5,7 +5,7 @@ import potions from "./data/potions-data-final-updated.json";
 const getIngredientIcon = (ingredient) => {
   // Remove quantities (e.g., "2x " from "2x Herb")
   const cleanIngredient = ingredient.replace(/^\d+x\s+/, '').trim().toLowerCase();
-  const base = "/kingdom-come-deliverance-2-potions/icons/";
+  const base = "/images/icons/";
   
   // Map ingredient names to their icon filenames
   const ingredientToIcon = {
@@ -53,7 +53,7 @@ const getIngredientIcon = (ingredient) => {
 
 // Helper function to get potion icon
 const getPotionIcon = (name) => {
-  const base = "/kingdom-come-deliverance-2-potions/icons/";
+  const base = "/images/icons/";
   const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
   
   // Map potion names to their icon filenames
@@ -120,6 +120,7 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   
   // Add responsive font styles
   const responsiveFontStyles = `
@@ -312,7 +313,7 @@ export default function App() {
   }, []);
 
   const getImageSrc = (name) => {
-    const base = "/kingdom-come-deliverance-2-potions/potion-recipes/";
+    const base = "/images/potion-recipes/";
     const filename = `KCD2-${name.replace(/ /g, "-")}.jpg`;
     return `${base}${filename}`;
   };
@@ -566,6 +567,14 @@ export default function App() {
     }, 300);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 200);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div style={{ 
       background: "#111", 
@@ -656,7 +665,7 @@ export default function App() {
             Ingredients
           </a>
           <a 
-            href="/kingdom-come-deliverance-2-potions/advanced.html"
+            href="/advanced.html"
             style={{ 
               color: activeSection === 'advanced' ? "#FF9800" : "#fff", 
               textDecoration: "none", 
@@ -747,7 +756,7 @@ export default function App() {
             {/* QR Code - hide on mobile */}
             {!isMobile && (
               <img 
-                src="/kingdom-come-deliverance-2-potions/images/bmc_qr.png"
+                src="/images/bmc_qr.png"
                 alt="Buy Me a Coffee QR Code"
                 style={{
                   width: "min(200px, 100%)",
@@ -888,7 +897,7 @@ export default function App() {
                 
                 <img
                   src={getPotionIcon(potion.name) || getImageSrc(potion.name)}
-                  onError={(e) => (e.target.src = "/kingdom-come-deliverance-2-potions/potion-recipes/temp.png")}
+                  onError={(e) => (e.target.src = "/images/potion-recipes/temp.png")}
                   alt={potion.name}
                   style={{ 
                     width: "100%", 
@@ -1116,7 +1125,7 @@ export default function App() {
               From healing concoctions to combat enhancers, the possibilities are vast for those willing to 
               experiment with the cauldron.
             </p>
-            <a href="/kingdom-come-deliverance-2-potions/alchemy-basics.html" style={{
+            <a href="/alchemy-basics.html" style={{
               display: "inline-block",
               padding: "12px 25px",
               background: "#FF9800",
@@ -1137,7 +1146,7 @@ export default function App() {
             padding: window.innerWidth > 768 ? "0" : "0 40px"
           }}>
             <img 
-              src="/kingdom-come-deliverance-2-potions/potion-recipes/temp.png" 
+              src="/images/potion-recipes/temp.png" 
               alt="Alchemy Basics"
               style={{
                 width: "100%",
@@ -1215,7 +1224,7 @@ export default function App() {
             padding: window.innerWidth > 768 ? "0" : "0 40px"
           }}>
             <img 
-              src="/kingdom-come-deliverance-2-potions/potion-recipes/temp.png" 
+              src="/images/potion-recipes/temp.png" 
               alt="Ingredient Locations"
               style={{
                 width: "100%",
@@ -1293,7 +1302,7 @@ export default function App() {
             padding: window.innerWidth > 768 ? "0" : "0 40px"
           }}>
             <img 
-              src="/kingdom-come-deliverance-2-potions/potion-recipes/temp.png" 
+              src="/images/potion-recipes/temp.png" 
               alt="Advanced Brewing Techniques"
               style={{
                 width: "100%",
@@ -1365,7 +1374,7 @@ export default function App() {
             Ingredient Locations
           </a>
           <a 
-            href="/kingdom-come-deliverance-2-potions/advanced.html"
+            href="/advanced.html"
             style={{
               padding: "10px 20px",
               background: "rgba(20, 20, 20, 0.7)",
@@ -1412,7 +1421,7 @@ export default function App() {
               }}>
                 <img
                   src={getPotionIcon(selectedPotion.name) || getImageSrc(selectedPotion.name)}
-                  onError={(e) => (e.target.src = "/kingdom-come-deliverance-2-potions/potion-recipes/temp.png")}
+                  onError={(e) => (e.target.src = "/images/potion-recipes/temp.png")}
                   alt={selectedPotion.name}
                   className="modal-img"
                   style={{ 
@@ -1690,11 +1699,42 @@ export default function App() {
         </a>
         <a 
           className="mobile-menu-link" 
-          href="/kingdom-come-deliverance-2-potions/advanced.html"
+          href="/advanced.html"
         >
           Advanced Techniques
         </a>
       </div>
+
+      {/* Back to Top Button */}
+      {showBackToTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          style={{
+            position: 'fixed',
+            bottom: '30px',
+            right: '30px',
+            background: '#FF9800',
+            color: '#111',
+            border: 'none',
+            borderRadius: '50%',
+            width: '50px',
+            height: '50px',
+            fontSize: '2rem',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+            cursor: 'pointer',
+            zIndex: 2000,
+            transition: 'background 0.2s, color 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.85
+          }}
+          aria-label="Back to top"
+          title="Back to top"
+        >
+          ↑
+        </button>
+      )}
     </div>
   );
 }

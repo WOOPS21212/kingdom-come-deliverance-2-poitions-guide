@@ -39,3 +39,12 @@ tasks/
 .cursor/mcp.json 
 # Sensitive configuration files
 .cursor/mcp.json
+
+# Exclude all images from git
+public/images/**/*.png
+public/images/**/*.jpg
+public/images/**/*.jpeg
+public/images/**/*.gif
+public/images/**/*.svg
+public/images/**/*.webp
+public/images/**/*.ico

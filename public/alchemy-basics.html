@@ -330,6 +330,69 @@
       margin-top: 25px;
       margin-bottom: 15px;
     }
+    
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 2001;
+    }
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 4px;
+      margin: 3px 0;
+      background: #FF9800;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .mobile-menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.97);
+      z-index: 2000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 30px;
+      padding: 40px 0 0 0;
+    }
+    .mobile-menu-link {
+      color: #fff;
+      font-size: 1.5rem;
+      text-decoration: none;
+      padding: 10px 0;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .mobile-menu-link:hover {
+      color: #FF9800;
+      border-color: #FF9800;
+    }
+    .mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .hamburger { display: flex !important; }
+      .nav-links { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -337,11 +400,23 @@
     <div class="nav-brand">KCD2 Alchemy</div>
     <div class="nav-links">
       <a href="/kingdom-come-deliverance-2-potions/" class="nav-link">Home</a>
-      <a href="/kingdom-come-deliverance-2-potions/#potions" class="nav-link">Potions</a>
+      <a href="/kingdom-come-deliverance-2-potions/alchemy-basics.html" class="nav-link" style="color:#FF9800; border-bottom:2px solid #FF9800;">Basics</a>
       <a href="/kingdom-come-deliverance-2-potions/#ingredients" class="nav-link">Ingredients</a>
-      <a href="/kingdom-come-deliverance-2-potions/#advanced" class="nav-link">Advanced</a>
+      <a href="/kingdom-come-deliverance-2-potions/advanced.html" class="nav-link">Advanced</a>
     </div>
+    <button class="hamburger" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
+  <div class="mobile-menu-overlay" style="display:none;">
+    <button class="mobile-menu-close" aria-label="Close menu">✕</button>
+    <a href="/kingdom-come-deliverance-2-potions/" class="mobile-menu-link">Home</a>
+    <a href="/kingdom-come-deliverance-2-potions/alchemy-basics.html" class="mobile-menu-link" style="color:#FF9800;">Basics</a>
+    <a href="/kingdom-come-deliverance-2-potions/#ingredients" class="mobile-menu-link">Ingredients</a>
+    <a href="/kingdom-come-deliverance-2-potions/advanced.html" class="mobile-menu-link">Advanced</a>
+  </div>
 
   <div class="container">
     <header class="header">
@@ -542,6 +617,33 @@
       // Initial highlight
       highlightNav();
     });
+
+    // Hamburger menu logic
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu-overlay');
+    const closeBtn = document.querySelector('.mobile-menu-close');
+    hamburger.addEventListener('click', () => {
+      mobileMenu.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+    closeBtn.addEventListener('click', () => {
+      mobileMenu.style.display = 'none';
+      document.body.style.overflow = '';
+    });
+    // Show hamburger on mobile
+    function handleResize() {
+      if (window.innerWidth <= 768) {
+        hamburger.style.display = 'flex';
+        document.querySelector('.nav-links').style.display = 'none';
+      } else {
+        hamburger.style.display = 'none';
+        document.querySelector('.nav-links').style.display = 'flex';
+        mobileMenu.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('DOMContentLoaded', handleResize);
   </script>
 </body>
 </html> 
