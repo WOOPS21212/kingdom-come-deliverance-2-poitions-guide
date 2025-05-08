@@ -1,3 +1,5 @@
+## vibecoded
+
 # Kingdom Come Deliverance 2 - Potions Guide
 
 A comprehensive interactive guide for alchemy and potions in Kingdom Come Deliverance 2.
