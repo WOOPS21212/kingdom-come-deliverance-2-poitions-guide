@@ -117,6 +117,144 @@ export default function App() {
   const [sortDirection, setSortDirection] = useState("asc");
   const [cardsVisible, setCardsVisible] = useState(false);
   const [modalAnimation, setModalAnimation] = useState(""); // "entering", "entered", "exiting", "exited"
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Add responsive font styles
+  const responsiveFontStyles = `
+    :root {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+    
+    @media (max-width: 768px) {
+      :root {
+        font-size: 14px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      :root {
+        font-size: 12px;
+      }
+    }
+    
+    /* Prevent horizontal scrolling */
+    body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
+      scroll-behavior: smooth;
+    }
+    
+    /* Responsive text styles */
+    .long-text {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Section highlight animation */
+    .section-highlight {
+      animation: highlight 1.5s ease-out;
+    }
+
+    @keyframes highlight {
+      0% {
+        box-shadow: 0 0 0 rgba(255, 152, 0, 0);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(255, 152, 0, 0.5);
+      }
+      100% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+    }
+  `;
+  
+  // Mobile menu styles
+  const mobileMenuStyles = `
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease-in-out;
+      padding: 20px;
+    }
+    
+    .mobile-menu.open {
+      transform: translateY(0);
+    }
+    
+    .mobile-menu-link {
+      color: white;
+      font-size: 1.5rem;
+      margin: 15px 0;
+      text-decoration: none;
+      position: relative;
+      padding: 5px 0;
+    }
+    
+    .mobile-menu-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #FF9800;
+      transition: width 0.3s ease;
+    }
+    
+    .mobile-menu-link:hover:after {
+      width: 100%;
+    }
+    
+    .mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+  `;
+  
+  // Smooth scrolling function
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      // Close mobile menu if open
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+      
+      // Add highlight class
+      section.classList.add('section-highlight');
+      
+      // Remove the highlight class after animation completes
+      setTimeout(() => {
+        section.classList.remove('section-highlight');
+      }, 1500);
+      
+      // Set active section
+      setActiveSection(sectionId);
+      
+      // Scroll to section
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   // Load Buy Me a Coffee script
   useEffect(() => {
@@ -124,6 +262,20 @@ export default function App() {
     return () => {
       document.body.removeChild(script);
     };
+  }, []);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    checkIfMobile();
+    
+    // Listen for resize events
+    window.addEventListener('resize', checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
   // Function to determine column count based on screen width
@@ -135,7 +287,8 @@ export default function App() {
     if (width > 1800) return "repeat(auto-fill, minmax(280px, 1fr))";
     if (width > 1200) return "repeat(auto-fill, minmax(250px, 1fr))";
     if (width > 768) return "repeat(auto-fill, minmax(220px, 1fr))";
-    return "repeat(auto-fill, minmax(200px, 1fr))";
+    if (width > 480) return "repeat(2, 1fr)"; // 2 columns for small tablets
+    return "repeat(1, 1fr)"; // Single column for phones
   }
   
   // Update columns when window is resized
@@ -276,6 +429,7 @@ export default function App() {
       color: #fff;
       z-index: 1000;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 20px;
       display: flex;
       flex-direction: column;
@@ -283,6 +437,8 @@ export default function App() {
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+      width: 100vw;
+      max-width: 100vw;
     }
     
     .modal-overlay.entering {
@@ -311,6 +467,9 @@ export default function App() {
       transform: scale(0.95);
       opacity: 0;
       transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      overflow-x: hidden;
+      box-sizing: border-box;
+      position: relative;
     }
     
     .modal-overlay.entered .modal-content {
@@ -321,6 +480,66 @@ export default function App() {
     .modal-overlay.entering .modal-content {
       transform: scale(0.95);
       opacity: 0;
+    }
+    
+    .modal-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(50, 50, 50, 0.7);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      z-index: 1100;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    
+    .modal-close-btn:hover {
+      background: rgba(70, 70, 70, 0.9);
+    }
+    
+    /* Make modal more responsive on mobile */
+    @media (max-width: 768px) {
+      .modal-content {
+        padding: 40px 15px 15px;
+        max-height: 100vh;
+        overflow-y: auto;
+      }
+      
+      .modal-img {
+        max-height: 30vh !important; 
+      }
+      
+      .modal-text {
+        font-size: 0.95rem !important;
+      }
+      
+      .modal-heading {
+        font-size: 1.2rem !important;
+        margin-bottom: 8px !important;
+      }
+      
+      .modal-title {
+        font-size: 1.6rem !important;
+        margin-bottom: 12px !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .modal-content {
+        padding: 40px 10px 10px;
+      }
+      
+      .modal-img {
+        max-height: 25vh !important;
+      }
     }
   `;
 
@@ -348,30 +567,159 @@ export default function App() {
   };
 
   return (
-    <div style={{ background: "#111", color: "#fff", minHeight: "100vh", padding: "20px", fontFamily: "sans-serif", width: "100%", boxSizing: "border-box" }}>
-      {/* Add a style tag for the hover effects */}
+    <div style={{ 
+      background: "#111", 
+      color: "#fff", 
+      minHeight: "100vh", 
+      padding: "20px", 
+      fontFamily: "sans-serif", 
+      width: "100%", 
+      boxSizing: "border-box",
+      overflowX: "hidden",
+      maxWidth: "100vw"
+    }}>
+      {/* Add style tags */}
       <style>{hoverStyles}</style>
       <style>{modalStyles}</style>
+      <style>{responsiveFontStyles}</style>
+      <style>{mobileMenuStyles}</style>
       
-      <div style={{ maxWidth: "1800px", margin: "0 auto", width: "100%" }}>
-        <h1 style={{ fontSize: "2rem", marginBottom: "20px", textAlign: "center" }}>Kingdom Come Deliverance 2 Alchemy Guide</h1>
+      {/* Navigation Bar */}
+      <nav style={{
+        position: "sticky",
+        top: 0,
+        background: "rgba(17, 17, 17, 0.95)",
+        backdropFilter: "blur(10px)",
+        borderBottom: "1px solid #333",
+        zIndex: 100,
+        padding: "15px 20px",
+        marginBottom: "30px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
+        boxSizing: "border-box",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)"
+      }}>
+        <div style={{ fontSize: "1.2rem", fontWeight: "bold", color: "#FF9800" }}>
+          KCD2 Alchemy
+        </div>
+        
+        <div style={{ 
+          display: isMobile ? "none" : "flex", 
+          gap: "20px", 
+          alignItems: "center"
+        }}>
+          <a 
+            onClick={() => scrollToSection('potions')} 
+            style={{ 
+              color: activeSection === 'potions' ? "#FF9800" : "#fff", 
+              textDecoration: "none", 
+              padding: "5px 0",
+              borderBottom: activeSection === 'potions' ? "2px solid #FF9800" : "2px solid transparent",
+              transition: "all 0.3s ease",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.borderColor = "#FF9800"}
+            onMouseOut={(e) => e.target.style.borderColor = activeSection === 'potions' ? "#FF9800" : "transparent"}
+          >
+            Potions
+          </a>
+          <a 
+            onClick={() => scrollToSection('basics')} 
+            style={{ 
+              color: activeSection === 'basics' ? "#FF9800" : "#fff", 
+              textDecoration: "none", 
+              padding: "5px 0",
+              borderBottom: activeSection === 'basics' ? "2px solid #FF9800" : "2px solid transparent",
+              transition: "all 0.3s ease",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.borderColor = "#FF9800"}
+            onMouseOut={(e) => e.target.style.borderColor = activeSection === 'basics' ? "#FF9800" : "transparent"}
+          >
+            Basics
+          </a>
+          <a 
+            onClick={() => scrollToSection('ingredients')} 
+            style={{ 
+              color: activeSection === 'ingredients' ? "#FF9800" : "#fff", 
+              textDecoration: "none", 
+              padding: "5px 0",
+              borderBottom: activeSection === 'ingredients' ? "2px solid #FF9800" : "2px solid transparent",
+              transition: "all 0.3s ease",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.borderColor = "#FF9800"}
+            onMouseOut={(e) => e.target.style.borderColor = activeSection === 'ingredients' ? "#FF9800" : "transparent"}
+          >
+            Ingredients
+          </a>
+          <a 
+            onClick={() => scrollToSection('advanced')} 
+            style={{ 
+              color: activeSection === 'advanced' ? "#FF9800" : "#fff", 
+              textDecoration: "none", 
+              padding: "5px 0",
+              borderBottom: activeSection === 'advanced' ? "2px solid #FF9800" : "2px solid transparent",
+              transition: "all 0.3s ease",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.borderColor = "#FF9800"}
+            onMouseOut={(e) => e.target.style.borderColor = activeSection === 'advanced' ? "#FF9800" : "transparent"}
+          >
+            Advanced
+          </a>
+        </div>
+        
+        {isMobile && (
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "#fff",
+              fontSize: "1.5rem",
+              cursor: "pointer"
+            }}
+          >
+            ☰
+          </button>
+        )}
+      </nav>
+      
+      <div style={{ 
+        maxWidth: "1800px", 
+        margin: "0 auto", 
+        width: "100%", 
+        overflowX: "hidden" 
+      }}>
+        <h1 id="potions" style={{ fontSize: "2rem", marginBottom: "20px", textAlign: "center" }}>Kingdom Come Deliverance 2 Alchemy Guide</h1>
         
         <div style={{
           display: "flex",
           flexDirection: window.innerWidth > 768 ? "row" : "column",
           gap: "30px",
           alignItems: "flex-start",
-          marginBottom: "30px"
+          marginBottom: "30px",
+          width: "100%"
         }}>
           {/* Left Column - Description */}
-          <div style={{ flex: "1" }}>
-            <p style={{ 
-              fontSize: "1rem", 
+          <div style={{ 
+            flex: "1",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%"
+          }}>
+            <p className="long-text" style={{ 
+              fontSize: "1.2rem", 
               color: "#ccc", 
               lineHeight: "1.6",
-              padding: "0 20px"
+              padding: "0 20px",
+              maxWidth: "100%"
             }}>
-              Discover the complete alchemy and potion brewing database for Kingdom Come Deliverance 2. Our comprehensive guide features every potion recipe, ingredient location, and brewing instruction you need. Perfect for both beginner alchemists learning the basics and expert brewers seeking advanced recipes. Find detailed step-by-step guides for crafting healing potions, combat buffs, and special elixirs to enhance your medieval RPG experience.
+              Discover the complete alchemy and potion brewing database for Kingdom Come Deliverance 2. Our comprehensive guide features every potion recipe, ingredient location, and brewing instruction you need. Perfect for both beginner alchemists learning the basics and expert brewers seeking advanced recipes. Find detailed step-by-step guides for crafting every potion in the game.
             </p>
           </div>
 
@@ -382,7 +730,8 @@ export default function App() {
             flexDirection: "column",
             alignItems: "center",
             gap: "20px",
-            padding: "0 20px"
+            padding: "0 20px",
+            width: "100%"
           }}>
             {/* Buy Me a Coffee Button */}
             <div id="buy-me-a-coffee-container" />
@@ -395,41 +744,75 @@ export default function App() {
               margin: "10px 0"
             }} />
 
-            {/* QR Code */}
-            <img 
-              src="/kingdom-come-deliverance-2-potions/images/bmc_qr.png"
-              alt="Buy Me a Coffee QR Code"
-              style={{
-                width: "200px",
-                height: "200px",
-                borderRadius: "10px"
-              }}
-            />
+            {/* QR Code - hide on mobile */}
+            {!isMobile && (
+              <img 
+                src="/kingdom-come-deliverance-2-potions/images/bmc_qr.png"
+                alt="Buy Me a Coffee QR Code"
+                style={{
+                  width: "min(200px, 100%)",
+                  maxWidth: "100%",
+                  height: "auto",
+                  aspectRatio: "1/1",
+                  borderRadius: "10px"
+                }}
+              />
+            )}
+
+            {/* Buy Me a Coffee Button */}
+            <a href="https://www.buymeacoffee.com/404found.art" target="_blank">
+              <img 
+                src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" 
+                alt="Buy Me A Coffee" 
+                style={{ 
+                  height: "60px", 
+                  width: "min(217px, 100%)",
+                  maxWidth: "100%" 
+                }} 
+              />
+            </a>
           </div>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginBottom: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px", marginBottom: "30px" }}>
           <input
             type="text"
             placeholder="Search potions by name or effects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ 
-              padding: "8px 12px", 
-              borderRadius: "4px", 
+              padding: "15px 20px", // Increased padding
+              borderRadius: "8px", // Larger border radius
               background: "#333", 
               color: "#fff", 
               border: "1px solid #444",
               width: "100%",
-              maxWidth: "400px"
+              maxWidth: "600px", // Increased from 400px
+              fontSize: "1.2rem", // Larger font
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)", // Added shadow for emphasis
+              margin: "0 auto 10px", // Center the search bar
+              transition: "all 0.2s ease"
             }}
           />
           
-          <div style={{ display: "flex", gap: "10px", alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{ 
+            display: "flex", 
+            gap: "10px", 
+            alignItems: "center", 
+            flexWrap: "wrap",
+            justifyContent: window.innerWidth <= 768 ? "center" : "flex-start" // Center on mobile
+          }}>
             <select 
               onChange={(e) => setSort(e.target.value)} 
               value={sort}
-              style={{ padding: "8px", borderRadius: "4px", background: "#333", color: "#fff", border: "1px solid #444" }}
+              style={{ 
+                padding: "10px 15px", // Increased padding
+                borderRadius: "6px", // Larger border radius
+                background: "#333", 
+                color: "#fff", 
+                border: "1px solid #444",
+                fontSize: "1rem" // Slightly larger font
+              }}
             >
               <option value="alphabetical">Sort A-Z</option>
               <option value="ingredients">Sort by Ingredients Count</option>
@@ -440,15 +823,16 @@ export default function App() {
             <button
               onClick={() => setSortDirection(sortDirection === "asc" ? "desc" : "asc")}
               style={{ 
-                padding: "8px 12px", 
-                borderRadius: "4px", 
+                padding: "10px 15px", // Increased padding
+                borderRadius: "6px", // Larger border radius
                 background: "#333", 
                 color: "#fff", 
                 border: "1px solid #444",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center",
+                fontSize: "1rem" // Slightly larger font
               }}
             >
               {sortDirection === "asc" ? "↑" : "↓"}
@@ -460,10 +844,11 @@ export default function App() {
           style={{ 
             display: "grid", 
             gridTemplateColumns: columns,
-            gap: "20px", 
+            gap: window.innerWidth <= 480 ? "30px" : "20px", // Increased gap for single column
             marginTop: "20px",
             width: "100%",
-            maxWidth: "100%"
+            maxWidth: "100%",
+            overflowX: "hidden"
           }}
         >
           {sortedPotions.map((potion, i) => (
@@ -474,7 +859,11 @@ export default function App() {
               style={{
                 opacity: cardsVisible ? 1 : 0,
                 animationDelay: `${i * 0.05}s`,
-                transitionDelay: `${i * 0.05}s`
+                transitionDelay: `${i * 0.05}s`,
+                maxWidth: "100%",
+                // Center card on mobile single column view for better appearance
+                margin: window.innerWidth <= 480 ? "0 auto" : "0",
+                width: window.innerWidth <= 480 ? "95%" : "100%"
               }}
             >
               <div style={{ position: "relative" }}>
@@ -501,41 +890,64 @@ export default function App() {
                   src={getPotionIcon(potion.name) || getImageSrc(potion.name)}
                   onError={(e) => (e.target.src = "/kingdom-come-deliverance-2-potions/potion-recipes/temp.png")}
                   alt={potion.name}
-                  style={{ width: "100%", aspectRatio: "16/9", objectFit: "cover" }}
+                  style={{ 
+                    width: "100%", 
+                    aspectRatio: window.innerWidth <= 480 ? "4/3" : "16/9", // Better aspect ratio for single column
+                    objectFit: "cover"
+                  }}
                 />
                 <h2 style={{ 
                   position: "absolute", 
                   bottom: "10px", 
                   left: "10px", 
                   margin: 0,
-                  fontSize: "1.3rem", 
+                  fontSize: window.innerWidth <= 480 ? "1.5rem" : "clamp(1rem, 3vw, 1.3rem)", // Larger font on mobile
                   color: "white",
                   textShadow: "0 2px 4px rgba(0,0,0,0.8)",
                   backgroundColor: "rgba(0,0,0,0.5)",
                   padding: "5px 10px",
-                  borderRadius: "4px"
+                  borderRadius: "4px",
+                  maxWidth: "calc(100% - 20px)", // Prevent text from overflowing
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
                 }}>
                   {potion.name}
                 </h2>
               </div>
-              <div style={{ padding: "12px" }}>
-                <p style={{ fontSize: "1rem", color: "#ccc", marginBottom: "12px" }}>{potion.effects}</p>
+              <div style={{ padding: window.innerWidth <= 480 ? "16px" : "12px" }}>
+                <p className="long-text" style={{ 
+                  fontSize: window.innerWidth <= 480 ? "1.1rem" : "1rem", 
+                  color: "#ccc", 
+                  marginBottom: "12px",
+                  overflowWrap: "break-word",
+                  wordWrap: "break-word"
+                }}>
+                  {potion.effects}
+                </p>
                 
                 {potion.baseLiquid && potion.baseLiquid.trim() !== "" && (
                   <div style={{ 
-                    fontSize: "0.95rem", 
+                    fontSize: window.innerWidth <= 480 ? "1rem" : "0.95rem", 
                     color: "#aaa", 
                     marginBottom: "10px",
                     display: "flex",
-                    alignItems: "center" 
+                    alignItems: "center",
+                    flexWrap: "wrap" // Allow wrapping on narrow screens
                   }}>
                     <span style={{ marginRight: "5px" }}>💧</span>
-                    <strong>Base:</strong> <span style={{ marginLeft: "5px" }}>{potion.baseLiquid}</span>
+                    <strong>Base:</strong> <span className="long-text" style={{ 
+                      marginLeft: "5px",
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word"
+                    }}>
+                      {potion.baseLiquid}
+                    </span>
                   </div>
                 )}
                 
                 <div style={{ 
-                  fontSize: "0.95rem", 
+                  fontSize: window.innerWidth <= 480 ? "1rem" : "0.95rem", 
                   color: "#aaa", 
                   borderTop: "1px solid #333",
                   paddingTop: "10px",
@@ -557,48 +969,74 @@ export default function App() {
                         const iconSrc = getIngredientIcon(item);
                         
                         return (
-                          <li key={index} style={{ marginBottom: "5px", display: "flex", alignItems: "center" }}>
-                            {[...Array(quantity)].map((_, i) => (
-                              <span key={i} style={{ marginRight: "4px" }}>
-                                {iconSrc ? (
-                                  <img 
-                                    src={iconSrc} 
-                                    alt={item}
-                                    style={{ 
-                                      width: "30px",
-                                      height: "30px",
-                                      verticalAlign: "middle",
-                                      marginRight: "4px"
-                                    }}
-                                  />
-                                ) : (
-                                  <span style={{ marginRight: "4px", fontSize: "1.5rem" }}>🧪</span>
-                                )}
-                              </span>
-                            ))}
-                            <span style={{ fontSize: "1.05rem" }}>{item}</span>
+                          <li key={index} style={{ 
+                            marginBottom: window.innerWidth <= 480 ? "10px" : "5px", 
+                            display: "flex", 
+                            alignItems: "center",
+                            flexWrap: "wrap" // Allow wrapping for long ingredient names
+                          }}>
+                            <div style={{ display: "flex", marginRight: "5px", flexShrink: 0 }}>
+                              {[...Array(quantity)].map((_, i) => (
+                                <span key={i} style={{ marginRight: "4px" }}>
+                                  {iconSrc ? (
+                                    <img 
+                                      src={iconSrc} 
+                                      alt={item}
+                                      style={{ 
+                                        width: window.innerWidth <= 480 ? "30px" : "24px", 
+                                        height: window.innerWidth <= 480 ? "30px" : "24px",
+                                        verticalAlign: "middle"
+                                      }}
+                                    />
+                                  ) : (
+                                    <span style={{ fontSize: window.innerWidth <= 480 ? "1.5rem" : "1.2rem" }}>🧪</span>
+                                  )}
+                                </span>
+                              ))}
+                            </div>
+                            <span className="long-text" style={{ 
+                              fontSize: window.innerWidth <= 480 ? "1.1rem" : "0.9rem",
+                              overflowWrap: "break-word",
+                              wordWrap: "break-word",
+                              hyphens: "auto"
+                            }}>
+                              {item}
+                            </span>
                           </li>
                         );
                       }
                       
                       const iconSrc = getIngredientIcon(trimmedIngredient);
                       return (
-                        <li key={index} style={{ marginBottom: "5px", display: "flex", alignItems: "center" }}>
-                          {iconSrc ? (
-                            <img 
-                              src={iconSrc} 
-                              alt={trimmedIngredient}
-                              style={{ 
-                                width: "30px",
-                                height: "30px",
-                                verticalAlign: "middle",
-                                marginRight: "6px"
-                              }}
-                            />
-                          ) : (
-                            <span style={{ marginRight: "6px", fontSize: "1.5rem" }}>🧪</span>
-                          )}
-                          <span style={{ fontSize: "1.05rem" }}>{trimmedIngredient}</span>
+                        <li key={index} style={{ 
+                          marginBottom: window.innerWidth <= 480 ? "10px" : "5px", 
+                          display: "flex", 
+                          alignItems: "center",
+                          flexWrap: "wrap" // Allow wrapping
+                        }}>
+                          <span style={{ marginRight: "6px", flexShrink: 0 }}>
+                            {iconSrc ? (
+                              <img 
+                                src={iconSrc} 
+                                alt={trimmedIngredient}
+                                style={{ 
+                                  width: window.innerWidth <= 480 ? "30px" : "24px", 
+                                  height: window.innerWidth <= 480 ? "30px" : "24px",
+                                  verticalAlign: "middle"
+                                }}
+                              />
+                            ) : (
+                              <span style={{ fontSize: window.innerWidth <= 480 ? "1.5rem" : "1.2rem" }}>🧪</span>
+                            )}
+                          </span>
+                          <span className="long-text" style={{ 
+                            fontSize: window.innerWidth <= 480 ? "1.1rem" : "0.9rem",
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                            hyphens: "auto"
+                          }}>
+                            {trimmedIngredient}
+                          </span>
                         </li>
                       );
                     })}
@@ -610,62 +1048,440 @@ export default function App() {
         </div>
       </div>
 
+      {/* New Multi-section Content */}
+      <div className="guide-sections" style={{
+        marginTop: "100px",
+        borderTop: "1px solid #333",
+        paddingTop: "50px",
+        width: "100%",
+        maxWidth: "100%",
+        overflowX: "hidden"
+      }}>
+        <h2 style={{
+          fontSize: "clamp(1.8rem, 5vw, 2.5rem)",
+          textAlign: "center",
+          margin: "0 0 60px 0",
+          color: "#fff",
+          textTransform: "uppercase",
+          letterSpacing: "2px",
+          fontWeight: "600"
+        }}>
+          Complete Guide to Alchemy
+        </h2>
+
+        {/* Section 1: Alchemy Basics */}
+        <section id="basics" style={{
+          padding: "60px 0",
+          margin: "0 auto",
+          maxWidth: "1200px",
+          display: "flex",
+          flexDirection: window.innerWidth > 768 ? "row" : "column",
+          alignItems: "center",
+          gap: "40px",
+          background: "rgba(20, 20, 20, 0.7)",
+          borderRadius: "12px",
+          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
+          overflow: "hidden",
+          marginBottom: "100px",
+          width: "95%",
+          scrollMarginTop: "80px" // Offset for sticky header
+        }}>
+          <div style={{
+            flex: window.innerWidth > 768 ? "1" : "auto",
+            padding: "0 40px",
+            order: window.innerWidth > 768 ? 1 : 2
+          }}>
+            <h3 style={{
+              fontSize: "clamp(1.5rem, 4vw, 2rem)",
+              marginBottom: "20px",
+              color: "#FF9800"
+            }}>Understanding Alchemy Basics</h3>
+            <p className="long-text" style={{
+              fontSize: "clamp(1rem, 3vw, 1.2rem)",
+              lineHeight: "1.8",
+              color: "#ddd",
+              marginBottom: "20px"
+            }}>
+              Alchemy in Kingdom Come Deliverance 2 builds upon the intricate brewing system of its predecessor. 
+              Players will discover that mastering this art requires understanding the properties of ingredients, 
+              following precise brewing processes, and proper timing.
+            </p>
+            <p className="long-text" style={{
+              fontSize: "clamp(1rem, 3vw, 1.2rem)",
+              lineHeight: "1.8",
+              color: "#ddd",
+              marginBottom: "20px"
+            }}>
+              The game introduces new ingredients and recipes, allowing for more diverse potion effects. 
+              From healing concoctions to combat enhancers, the possibilities are vast for those willing to 
+              experiment with the cauldron.
+            </p>
+            <a href="/kingdom-come-deliverance-2-potions/alchemy-basics.html" style={{
+              display: "inline-block",
+              padding: "12px 25px",
+              background: "#FF9800",
+              color: "#111",
+              textDecoration: "none",
+              borderRadius: "5px",
+              fontWeight: "bold",
+              marginTop: "15px",
+              transition: "background 0.3s ease"
+            }}>
+              Learn More About Basics
+            </a>
+          </div>
+          <div style={{
+            flex: window.innerWidth > 768 ? "1" : "auto",
+            order: window.innerWidth > 768 ? 2 : 1,
+            width: window.innerWidth > 768 ? "50%" : "100%",
+            padding: window.innerWidth > 768 ? "0" : "0 40px"
+          }}>
+            <img 
+              src="/kingdom-come-deliverance-2-potions/potion-recipes/temp.png" 
+              alt="Alchemy Basics"
+              style={{
+                width: "100%",
+                borderRadius: "8px",
+                boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)"
+              }}
+            />
+          </div>
+        </section>
+
+        {/* Section 2: Ingredient Locations */}
+        <section id="ingredients" style={{
+          padding: "60px 0",
+          margin: "0 auto",
+          maxWidth: "1200px",
+          display: "flex",
+          flexDirection: window.innerWidth > 768 ? "row" : "column",
+          alignItems: "center",
+          gap: "40px",
+          background: "rgba(20, 20, 20, 0.7)",
+          borderRadius: "12px",
+          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
+          overflow: "hidden",
+          marginBottom: "100px",
+          width: "95%",
+          scrollMarginTop: "80px" // Offset for sticky header
+        }}>
+          <div style={{
+            flex: window.innerWidth > 768 ? "1" : "auto",
+            padding: "0 40px",
+            order: window.innerWidth > 768 ? 2 : 2
+          }}>
+            <h3 style={{
+              fontSize: "clamp(1.5rem, 4vw, 2rem)",
+              marginBottom: "20px",
+              color: "#FF9800"
+            }}>Ingredient Locations</h3>
+            <p className="long-text" style={{
+              fontSize: "clamp(1rem, 3vw, 1.2rem)",
+              lineHeight: "1.8",
+              color: "#ddd",
+              marginBottom: "20px"
+            }}>
+              Finding rare alchemy ingredients is a crucial part of becoming a master alchemist in Kingdom Come Deliverance 2. 
+              The expanded world offers various biomes where specific plants and materials can be gathered.
+            </p>
+            <p className="long-text" style={{
+              fontSize: "clamp(1rem, 3vw, 1.2rem)",
+              lineHeight: "1.8",
+              color: "#ddd",
+              marginBottom: "20px"
+            }}>
+              From dense forests where mushrooms and herbs thrive to mountain regions with rare minerals, 
+              every area of the map holds specific ingredients. Learning where to find each component will 
+              save you valuable time in your alchemical pursuits.
+            </p>
+            <a href="https://mapgenie.io/kingdom-come-deliverance-2/guides/recipes" style={{
+              display: "inline-block",
+              padding: "12px 25px",
+              background: "#FF9800",
+              color: "#111",
+              textDecoration: "none",
+              borderRadius: "5px",
+              fontWeight: "bold",
+              marginTop: "15px",
+              transition: "background 0.3s ease"
+            }}>
+              View Ingredient Map
+            </a>
+          </div>
+          <div style={{
+            flex: window.innerWidth > 768 ? "1" : "auto",
+            order: window.innerWidth > 768 ? 1 : 1,
+            width: window.innerWidth > 768 ? "50%" : "100%",
+            padding: window.innerWidth > 768 ? "0" : "0 40px"
+          }}>
+            <img 
+              src="/kingdom-come-deliverance-2-potions/potion-recipes/temp.png" 
+              alt="Ingredient Locations"
+              style={{
+                width: "100%",
+                borderRadius: "8px",
+                boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)"
+              }}
+            />
+          </div>
+        </section>
+
+        {/* Section 3: Advanced Brewing Techniques */}
+        <section id="advanced" style={{
+          padding: "60px 0",
+          margin: "0 auto",
+          maxWidth: "1200px",
+          display: "flex",
+          flexDirection: window.innerWidth > 768 ? "row" : "column",
+          alignItems: "center",
+          gap: "40px",
+          background: "rgba(20, 20, 20, 0.7)",
+          borderRadius: "12px",
+          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
+          overflow: "hidden",
+          marginBottom: "100px",
+          width: "95%",
+          scrollMarginTop: "80px" // Offset for sticky header
+        }}>
+          <div style={{
+            flex: window.innerWidth > 768 ? "1" : "auto",
+            padding: "0 40px",
+            order: window.innerWidth > 768 ? 1 : 2
+          }}>
+            <h3 style={{
+              fontSize: "clamp(1.5rem, 4vw, 2rem)",
+              marginBottom: "20px",
+              color: "#9C27B0"
+            }}>Advanced Brewing Techniques</h3>
+            <p className="long-text" style={{
+              fontSize: "clamp(1rem, 3vw, 1.2rem)",
+              lineHeight: "1.8",
+              color: "#ddd",
+              marginBottom: "20px"
+            }}>
+              Once you've mastered the basics, it's time to explore advanced brewing techniques. 
+              Kingdom Come Deliverance 2 introduces potion enhancement methods that allow you to amplify 
+              effects, increase duration, or reduce negative side effects.
+            </p>
+            <p className="long-text" style={{
+              fontSize: "clamp(1rem, 3vw, 1.2rem)",
+              lineHeight: "1.8",
+              color: "#ddd",
+              marginBottom: "20px"
+            }}>
+              Techniques such as double distillation, essence extraction, and catalyst brewing open new 
+              possibilities for creating potent concoctions that can give you an edge in the most challenging situations.
+            </p>
+            <a href="#" style={{
+              display: "inline-block",
+              padding: "12px 25px",
+              background: "#9C27B0",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "5px",
+              fontWeight: "bold",
+              marginTop: "15px",
+              transition: "background 0.3s ease"
+            }}>
+              Master Advanced Techniques
+            </a>
+          </div>
+          <div style={{
+            flex: window.innerWidth > 768 ? "1" : "auto",
+            order: window.innerWidth > 768 ? 2 : 1,
+            width: window.innerWidth > 768 ? "50%" : "100%",
+            padding: window.innerWidth > 768 ? "0" : "0 40px"
+          }}>
+            <img 
+              src="/kingdom-come-deliverance-2-potions/potion-recipes/temp.png" 
+              alt="Advanced Brewing Techniques"
+              style={{
+                width: "100%",
+                borderRadius: "8px",
+                boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)"
+              }}
+            />
+          </div>
+        </section>
+        
+        {/* Section navigation */}
+        <div style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "15px",
+          margin: "50px 0 20px",
+          flexWrap: "wrap",
+          padding: "0 20px"
+        }}>
+          <a 
+            onClick={() => scrollToSection('potions')}
+            style={{
+              padding: "10px 20px",
+              background: "rgba(20, 20, 20, 0.7)",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "5px",
+              transition: "background 0.3s ease",
+              textAlign: "center",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.background = "rgba(40, 40, 40, 0.7)"}
+            onMouseOut={(e) => e.target.style.background = "rgba(20, 20, 20, 0.7)"}
+          >
+            Back to Potions
+          </a>
+          <a 
+            onClick={() => scrollToSection('basics')}
+            style={{
+              padding: "10px 20px",
+              background: "rgba(20, 20, 20, 0.7)",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "5px",
+              transition: "background 0.3s ease",
+              textAlign: "center",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.background = "rgba(40, 40, 40, 0.7)"}
+            onMouseOut={(e) => e.target.style.background = "rgba(20, 20, 20, 0.7)"}
+          >
+            Alchemy Basics
+          </a>
+          <a 
+            onClick={() => scrollToSection('ingredients')}
+            style={{
+              padding: "10px 20px",
+              background: "rgba(20, 20, 20, 0.7)",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "5px",
+              transition: "background 0.3s ease",
+              textAlign: "center",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.background = "rgba(40, 40, 40, 0.7)"}
+            onMouseOut={(e) => e.target.style.background = "rgba(20, 20, 20, 0.7)"}
+          >
+            Ingredient Locations
+          </a>
+          <a 
+            onClick={() => scrollToSection('advanced')}
+            style={{
+              padding: "10px 20px",
+              background: "rgba(20, 20, 20, 0.7)",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "5px",
+              transition: "background 0.3s ease",
+              textAlign: "center",
+              cursor: "pointer"
+            }}
+            onMouseOver={(e) => e.target.style.background = "rgba(40, 40, 40, 0.7)"}
+            onMouseOut={(e) => e.target.style.background = "rgba(20, 20, 20, 0.7)"}
+          >
+            Advanced Techniques
+          </a>
+        </div>
+      </div>
+
       {selectedPotion && (
         <div
           onClick={closePotionDetail}
           className={`modal-overlay ${modalAnimation}`}
         >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            {/* Sticky close button */}
+            <button 
+              className="modal-close-btn"
+              onClick={closePotionDetail}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+            
             <div style={{ 
               display: "flex", 
               flexDirection: window.innerWidth > 768 ? "row" : "column",
-              gap: "30px",
-              alignItems: "flex-start"
+              gap: "20px",
+              alignItems: "flex-start",
+              maxWidth: "100%"
             }}>
               <div style={{ 
                 width: window.innerWidth > 768 ? "40%" : "100%",
+                maxWidth: "100%"
               }}>
                 <img
                   src={getPotionIcon(selectedPotion.name) || getImageSrc(selectedPotion.name)}
                   onError={(e) => (e.target.src = "/kingdom-come-deliverance-2-potions/potion-recipes/temp.png")}
                   alt={selectedPotion.name}
+                  className="modal-img"
                   style={{ 
                     width: "100%", 
                     objectFit: "cover", 
                     borderRadius: "10px",
-                    maxHeight: "60vh"
+                    maxHeight: window.innerWidth > 768 ? "60vh" : "30vh"
                   }}
                 />
-                <div style={{ marginTop: "15px" }}>
-                  <h3 style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Effects:</h3>
-                  <p style={{ fontSize: "1.1rem", lineHeight: "1.5" }}>{selectedPotion.effects}</p>
+                <div style={{ marginTop: "10px" }}>
+                  <h3 className="modal-heading" style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Effects:</h3>
+                  <p className="long-text modal-text" style={{ 
+                    fontSize: "1.1rem", 
+                    lineHeight: "1.4",
+                    overflowWrap: "break-word",
+                    wordWrap: "break-word"
+                  }}>
+                    {selectedPotion.effects}
+                  </p>
                   
                   {selectedPotion.enhancedEffects && (
-                    <div style={{ marginTop: "15px" }}>
-                      <h3 style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Enhanced Effects:</h3>
-                      <p style={{ fontSize: "1.1rem", lineHeight: "1.5" }}>{selectedPotion.enhancedEffects}</p>
+                    <div style={{ marginTop: "10px" }}>
+                      <h3 className="modal-heading" style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Enhanced Effects:</h3>
+                      <p className="long-text modal-text" style={{ 
+                        fontSize: "1.1rem", 
+                        lineHeight: "1.4",
+                        overflowWrap: "break-word",
+                        wordWrap: "break-word"
+                      }}>
+                        {selectedPotion.enhancedEffects}
+                      </p>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div style={{ flex: 1 }}>
-                <h2 style={{ fontSize: "2.2rem", marginBottom: "20px" }}>{selectedPotion.name}</h2>
+              <div style={{ flex: 1, maxWidth: "100%" }}>
+                <h2 className="modal-title" style={{ 
+                  fontSize: "clamp(1.5rem, 5vw, 2.2rem)", // Responsive font size
+                  marginBottom: "20px",
+                  overflowWrap: "break-word",
+                  wordWrap: "break-word"
+                }}>
+                  {selectedPotion.name}
+                </h2>
                 
                 {selectedPotion.baseLiquid && selectedPotion.baseLiquid.trim() !== "" && (
-                  <div style={{ marginBottom: "20px" }}>
-                    <h3 style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Base Liquid:</h3>
-                    <p style={{ fontSize: "1.1rem" }}>{selectedPotion.baseLiquid}</p>
+                  <div style={{ marginBottom: "15px" }}>
+                    <h3 className="modal-heading" style={{ fontSize: "1.3rem", marginBottom: "8px" }}>Base Liquid:</h3>
+                    <p className="long-text modal-text" style={{ 
+                      fontSize: "1.1rem",
+                      overflowWrap: "break-word",
+                      wordWrap: "break-word"
+                    }}>
+                      {selectedPotion.baseLiquid}
+                    </p>
                   </div>
                 )}
 
-                <div style={{ marginBottom: "20px" }}>
-                  <h3 style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Ingredients:</h3>
+                <div style={{ marginBottom: "15px" }}>
+                  <h3 className="modal-heading" style={{ fontSize: "1.3rem", marginBottom: "8px" }}>Ingredients:</h3>
                   <ul style={{ 
                     listStyleType: "none", 
                     padding: "0", 
                     margin: "0",
-                    fontSize: "1.1rem"
+                    fontSize: "1.1rem",
+                    display: "grid",
+                    gridTemplateColumns: window.innerWidth > 480 ? "repeat(2, 1fr)" : "1fr",
+                    gap: "5px"
                   }}>
                     {selectedPotion.ingredients.split(',').map((ingredient, index) => {
                       const trimmedIngredient = ingredient.trim();
@@ -678,32 +1494,38 @@ export default function App() {
                         
                         return (
                           <li key={index} style={{ 
-                            marginBottom: "12px", 
+                            marginBottom: "5px", 
                             display: "flex", 
-                            alignItems: "center" 
+                            alignItems: "center",
+                            flexWrap: "wrap"
                           }}>
-                            {[...Array(quantity)].map((_, i) => (
-                              <span key={i} style={{ marginRight: "5px" }}>
-                                {iconSrc ? (
-                                  <img 
-                                    src={iconSrc} 
-                                    alt={item}
-                                    style={{ 
-                                      width: "36px",
-                                      height: "36px",
-                                      verticalAlign: "middle",
-                                      marginRight: "4px"
-                                    }}
-                                  />
-                                ) : (
-                                  <span style={{ 
-                                    marginRight: "5px", 
-                                    fontSize: "1.8rem"
-                                  }}>🧪</span>
-                                )}
-                              </span>
-                            ))}
-                            <span style={{ fontSize: "1.8rem" }}>{item}</span>
+                            <div style={{ display: "flex", marginRight: "5px", flexShrink: 0 }}>
+                              {[...Array(quantity)].map((_, i) => (
+                                <span key={i} style={{ marginRight: "2px" }}>
+                                  {iconSrc ? (
+                                    <img 
+                                      src={iconSrc} 
+                                      alt={item}
+                                      style={{ 
+                                        width: "20px", 
+                                        height: "20px",
+                                        verticalAlign: "middle"
+                                      }}
+                                    />
+                                  ) : (
+                                    <span style={{ fontSize: "1rem" }}>🧪</span>
+                                  )}
+                                </span>
+                              ))}
+                            </div>
+                            <span className="long-text modal-text" style={{ 
+                              fontSize: "0.9rem",
+                              overflowWrap: "break-word",
+                              wordWrap: "break-word",
+                              hyphens: "auto"
+                            }}>
+                              {item}
+                            </span>
                           </li>
                         );
                       }
@@ -711,41 +1533,50 @@ export default function App() {
                       const iconSrc = getIngredientIcon(trimmedIngredient);
                       return (
                         <li key={index} style={{ 
-                          marginBottom: "12px", 
+                          marginBottom: "5px", 
                           display: "flex", 
-                          alignItems: "center"
+                          alignItems: "center",
+                          flexWrap: "wrap"
                         }}>
-                          {iconSrc ? (
-                            <img 
-                              src={iconSrc} 
-                              alt={trimmedIngredient}
-                              style={{ 
-                                width: "36px",
-                                height: "36px",
-                                verticalAlign: "middle",
-                                marginRight: "8px"
-                              }}
-                            />
-                          ) : (
-                            <span style={{ marginRight: "8px", fontSize: "1.8rem" }}>🧪</span>
-                          )}
-                          <span style={{ fontSize: "1.8rem" }}>{trimmedIngredient}</span>
+                          <span style={{ marginRight: "6px", flexShrink: 0 }}>
+                            {iconSrc ? (
+                              <img 
+                                src={iconSrc} 
+                                alt={trimmedIngredient}
+                                style={{ 
+                                  width: "20px", 
+                                  height: "20px",
+                                  verticalAlign: "middle"
+                                }}
+                              />
+                            ) : (
+                              <span style={{ fontSize: "1rem" }}>🧪</span>
+                            )}
+                          </span>
+                          <span className="long-text modal-text" style={{ 
+                            fontSize: "0.9rem",
+                            overflowWrap: "break-word",
+                            wordWrap: "break-word",
+                            hyphens: "auto"
+                          }}>
+                            {trimmedIngredient}
+                          </span>
                         </li>
                       );
                     })}
                   </ul>
                 </div>
 
-                <div style={{ marginBottom: "20px" }}>
-                  <h3 style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Preparation Steps:</h3>
+                <div style={{ marginBottom: "15px" }}>
+                  <h3 className="modal-heading" style={{ fontSize: "1.3rem", marginBottom: "8px" }}>Preparation Steps:</h3>
                   <ol style={{ 
-                    paddingLeft: "20px", 
+                    paddingLeft: window.innerWidth > 480 ? "20px" : "16px", 
                     margin: "0", 
                     fontSize: "1.1rem",
-                    lineHeight: "1.6"
+                    lineHeight: "1.5"
                   }}>
                     {selectedPotion.steps.split('>').map((step, index) => (
-                      <li key={index} style={{ marginBottom: "12px" }}>
+                      <li key={index} style={{ marginBottom: "8px" }} className="modal-text">
                         {step.trim()}
                       </li>
                     ))}
@@ -753,35 +1584,117 @@ export default function App() {
                 </div>
                 
                 {selectedPotion.acquisition && (
-                  <div style={{ marginBottom: "20px" }}>
-                    <h3 style={{ fontSize: "1.3rem", marginBottom: "10px" }}>Where to Find:</h3>
-                    <p style={{ fontSize: "1.1rem", lineHeight: "1.5" }}>{selectedPotion.acquisition}</p>
+                  <div style={{ marginBottom: "15px" }}>
+                    <h3 className="modal-heading" style={{ fontSize: "1.3rem", marginBottom: "8px" }}>Where to Find:</h3>
+                    <p className="modal-text" style={{ fontSize: "1.1rem", lineHeight: "1.4" }}>{selectedPotion.acquisition}</p>
                   </div>
                 )}
-                
-                <button 
-                  onClick={closePotionDetail}
-                  style={{
-                    marginTop: "20px",
-                    padding: "12px 24px",
-                    background: "#333",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    transition: "background-color 0.2s ease-out",
-                    fontSize: "1.1rem"
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#444"}
-                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#333"}
-                >
-                  Close
-                </button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Footer */}
+      <footer style={{
+        borderTop: "1px solid #333",
+        marginTop: "50px",
+        padding: "20px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "clamp(10px, 3vw, 30px)", // Responsive gap
+        backgroundColor: "#1a1a1a",
+        flexWrap: "wrap", // Allow wrapping on small screens
+        width: "100%",
+        boxSizing: "border-box",
+        overflowX: "hidden"
+      }}>
+        <a 
+          href="https://www.instagram.com/andrew_mcbride_atl/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ color: "#ccc", fontSize: "24px", transition: "color 0.3s" }}
+          onMouseOver={(e) => e.target.style.color = "#E1306C"}
+          onMouseOut={(e) => e.target.style.color = "#ccc"}
+        >
+          <i className="fab fa-instagram"></i>
+        </a>
+        <a 
+          href="https://vimeo.com/andrewmcbride" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ color: "#ccc", fontSize: "24px", transition: "color 0.3s" }}
+          onMouseOver={(e) => e.target.style.color = "#00ADEF"}
+          onMouseOut={(e) => e.target.style.color = "#ccc"}
+        >
+          <i className="fab fa-vimeo-v"></i>
+        </a>
+        <a 
+          href="https://www.404found.art/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ 
+            color: "#ccc", 
+            textDecoration: "none", 
+            fontSize: "16px",
+            transition: "color 0.3s"
+          }}
+          onMouseOver={(e) => e.target.style.color = "#FF9800"}
+          onMouseOut={(e) => e.target.style.color = "#ccc"}
+        >
+          404found.art
+        </a>
+        <a 
+          href="https://motionographer.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          style={{ 
+            color: "#ccc", 
+            textDecoration: "none", 
+            fontSize: "16px",
+            transition: "color 0.3s"
+          }}
+          onMouseOver={(e) => e.target.style.color = "#FF4D4D"}
+          onMouseOut={(e) => e.target.style.color = "#ccc"}
+        >
+          Motionographer
+        </a>
+      </footer>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${mobileMenuOpen ? 'open' : ''}`}>
+        <button 
+          className="mobile-menu-close" 
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          ✕
+        </button>
+        <a 
+          className="mobile-menu-link" 
+          onClick={() => scrollToSection('potions')}
+        >
+          Potions
+        </a>
+        <a 
+          className="mobile-menu-link" 
+          onClick={() => scrollToSection('basics')}
+        >
+          Alchemy Basics
+        </a>
+        <a 
+          className="mobile-menu-link" 
+          onClick={() => scrollToSection('ingredients')}
+        >
+          Ingredient Locations
+        </a>
+        <a 
+          className="mobile-menu-link" 
+          onClick={() => scrollToSection('advanced')}
+        >
+          Advanced Techniques
+        </a>
+      </div>
     </div>
   );
 }
